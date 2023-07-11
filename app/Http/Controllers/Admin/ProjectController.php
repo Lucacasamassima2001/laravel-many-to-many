@@ -18,8 +18,8 @@ class ProjectController extends Controller
             'url_image'=> 'required|url|max:200',
             'repo'=> 'required|string|min:5|max:100',
             'description'=> 'required|string|min:5',
-            // 'tags' => 'nullable|array',
-            // 'tags.*' => 'integer|exists:tags:id',
+            // 'technologies' => 'nullable|array',
+            // 'technologies.*' => 'integer|exists:technologies:id',
     ];
 
     private $validation_messages = [
