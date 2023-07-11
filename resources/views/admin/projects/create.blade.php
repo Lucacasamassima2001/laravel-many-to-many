@@ -32,12 +32,12 @@
         </div>
         </div>
         <div class="mb-3">
-            <label for="tag" class="form-label">Tags</label>
-            @foreach($tags as $tag)
+            <label for="technology" class="form-label">Technologies</label>
+            @foreach($technologies as $technology)
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="{{$tag->id}}" id="tag{{$tag->id}}" name="tags[]" @if(in_array($tag->id, old('tags', [])))checked @endif>
-                <label class="form-check-label" for="tag{{$tag->id}}">
-                  {{$tag->name}}
+                <input class="form-check-input" type="checkbox" value="{{$technology->id}}" id="technology{{$technology->id}}" name="technologies[]" @if(in_array($technology->id, old('technologies', [])))checked @endif>
+                <label class="form-check-label" for="technology{{$technology->id}}">
+                  {{$technology->name}}
                 </label>
               </div>
               @endforeach
