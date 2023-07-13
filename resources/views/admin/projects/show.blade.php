@@ -12,6 +12,9 @@
         <div class="container d-flex justify-content-center">
             <img class="py-3" src="{{$project->url_image}}" alt="">
         </div>
+        <div class="container d-flex justify-content-center">
+            <img class="py-3" src="{{asset('storage/' . $project->image)}}" alt="">
+        </div>
     </div>
 @endsection
 

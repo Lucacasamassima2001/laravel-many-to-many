@@ -2,7 +2,7 @@
 
 @section('contents')
     <h1 class="main-title py-3">Add new project</h1>
-    <form method="POST" action="{{ route('admin.projects.store') }}" novalidate>
+    <form method="POST" action="{{ route('admin.projects.store') }}"  enctype="multipart/form-data" novalidate>
         @csrf
 
         <div class="mb-3">
@@ -56,6 +56,14 @@
                 @error('url_image') {{ $message }} @enderror
             </div>
         </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Default file input example</label>
+            <input class="form-control" type="file" id="image" name="image" accept="image/*">
+            <div class="invalid-feedback">
+                @error('image') {{ $message }} @enderror
+            </div>
+          </div>
 
         <div class="mb-3">
             <label for="repo" class="form-label">Nome repository</label>

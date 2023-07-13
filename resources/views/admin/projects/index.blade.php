@@ -46,8 +46,24 @@
                 <th scope="row">{{ $project->id }}</th>
                 <td>{{ $project->title }}</td>
                 <td>{{ $project->url_image }}</td>
-                <td><a href="{{ route('admin.types.show', ['type' => $project->type]) }}">{{ $project->type->name }}</a></td>
-                <td>{{implode(', ' , $project->technologies->pluck('name')->all())}} </td>
+                <td>
+                    @if($project->type)
+                    <a href="{{ route('admin.types.show', ['type' => $project->type]) }}">{{ $project->type->name }}</a>
+                    @else
+                    uncategorized
+                    @endif
+                </td>
+                {{-- <td>{{implode(', ' , $project->technologies->pluck('name')->all())}}</td> --}}
+                <td>
+                    @foreach($project->technologies as $technology)
+                    @if($project->technologies)
+                    <a href="{{ route('admin.technologies.show', ['technology' => $technology]) }}">{{ $technology->name }}</a>
+                    @else
+                    uncategorized
+                    @endif  
+                    @if (!$loop->last),  @endif
+                    @endforeach
+                </td>
                 <td>{{ $project->description }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.projects.show', ['project' => $project]) }}">View</a>

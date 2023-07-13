@@ -70,9 +70,9 @@ class TechnologyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Technology $technology)
     {
-        //
+        return view('admin.technologies.show', compact('technology'));
     }
 
     /**
@@ -119,6 +119,8 @@ class TechnologyController extends Controller
      */
     public function destroy(Technology $technology)
     {
+        $technology->projects()->detach();
+        // $project->technologies()->sync([]);
         $technology->delete();
         return to_route('admin.technologies.index')->with('delete_success', $technology);
     }

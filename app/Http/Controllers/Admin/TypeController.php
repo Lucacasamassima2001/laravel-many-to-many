@@ -139,8 +139,12 @@ class TypeController extends Controller
     public function harddelete($id)
     {
         $type = Type::withTrashed()->find($id);
+        // foreach ($type->projects as $project) {
+        //     $project->type_id = 1;
+        //     $project->update();
+        // }
         $type->forceDelete();
 
-        return to_route('admin.types.trashed')->with('delete_success', $type);
+        return to_route('admin.types.index')->with('delete_success', $type);
     }
 }

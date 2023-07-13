@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Technology;
 use App\Models\Type;
 use App\Models\Project;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -15,7 +16,8 @@ class ProjectController extends Controller
     private $validations = [
             'title'=> 'required|string|min:5|max:100',
             'type_id' =>'required|integer|exists:types,id',
-            'url_image'=> 'required|url|max:200',
+            'url_image'=> 'nullable|required|url|max:200',
+            // 'image' => 'nullable|image|max:512',
             'repo'=> 'required|string|min:5|max:100',
             'description'=> 'required|string|min:5',
             // 'technologies' => 'nullable|array',
@@ -63,11 +65,18 @@ class ProjectController extends Controller
         // richiedere($data) e validare i dati del form
         $request->validate($this->validations, $this->validation_messages);
         $data = $request->all();
+
+        // salvare immagine nella cartella uploads
+        // prendere il percorso dell'immagine salvata
+
+        $imagePath = Storage::put('uploads', $data['image']);
         // salvare i dati se corretti
         $newProject = new Project();
         $newProject->title          = $data['title'];
         $newProject->type_id        = $data['type_id'];
         $newProject->url_image      = $data['url_image'];
+        $newProject->image      = $imagePath;
+
         $newProject->repo           = $data['repo'];
         $newProject->description    = $data['description'];
         $newProject->save();
@@ -115,9 +124,26 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+
         $request->validate($this->validations, $this->validation_messages);
         // richiedere($data) e validare i dati del form
         $data = $request->all();
+
+
+        if($data['image']){
+        // salvare eventuale img nuova
+        $imagePath = Storage::put('uploads', $data['image']);
+
+        if($project->image)
+        // eliminare eventuale img vecchia
+        Storage::delete($project->image);
+
+        // aggiorno valore nella colonna
+        $project->image      = $imagePath;
+
+        }
+        
+
         // salvare i dati se corretti
         $project->title = $data['title'];
         $project->type_id = $data['type_id'];
@@ -169,9 +195,12 @@ class ProjectController extends Controller
 
         $project = Project::withTrashed()->find($id);
 
+        if($project->image)
+        // eliminare eventuale img vecchia
+        Storage::delete($project->image);
         // disassociare tutti i tag dal post
         $project->technologies()->detach();
-        $project->technologies()->sync([]);
+        // $project->technologies()->sync([]);
 
         $project->forceDelete();
 
